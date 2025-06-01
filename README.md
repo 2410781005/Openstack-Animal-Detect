@@ -64,7 +64,6 @@ Animal Detection Service von Gruppe 3, Christoph Hiess und Maximilian Resch, bie
 
 Das Image Detection Service bietet die Möglichkeit Objekte, spezifiziert auf Tiere, auf einem übermittelten Bild zu identifizieren und zu erkennen. Die Übertragung erfolgt mittels einer Anfrage an das API-Gateway. Dieser Service (API-Gateway) beinhaltet die gesammte Logik, nimmt das Bild entgegen, ladet es auf einen S3 Objekt Storage (Minio) hoch, sendet das Bild an den Image Detection Service und trägt die Ergebnisse mit dem Dateinamen in eine Datenbank ein.
 
-ARCHITEKTURDIAGRAMM
 
 ![Architektur_OpenStack.png](src/Architektur_OpenStack.png)
 
