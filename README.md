@@ -66,7 +66,7 @@ Das Image Detection Service bietet die Möglichkeit Objekte, spezifiziert auf Ti
 
 ARCHITEKTURDIAGRAMM
 
-![Architektur_OpenStack.png](/Users/maxresch/Documents/FH%20Burgenland/INENPT-Buzanits/Architektur_OpenStack.png)
+![Architektur_OpenStack.png](src/Architektur_OpenStack.png)
 
 > WICHTIG: Wir haben uns bei diesem Projekt auf die OpenStack Infrastruktur konzentriert, Sicherheitsfunktionen des Service wurden nachrangig behandelt. Im letzten Punkt "Security Verbesserungen" haben wir beschrieben wie wir unseren Service besser absichern könnte.
 
