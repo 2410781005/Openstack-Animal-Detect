@@ -371,7 +371,7 @@ Default IPv4 and IPv6 Regel löschen und folgende neu erstellen:
   </tr>
 </table>
 
-![Bildschirmfoto 2025-05-28 um 19.24.53.png](/Users/maxresch/Desktop/Bildschirmfoto%202025-05-28%20um%2019.24.53.png)
+![Bildschirmfoto 2025-05-28 um 19.24.53.png](src/api-access-rule.png)
 
 **Minio** - Sicherheitsgruppe
 
@@ -448,7 +448,7 @@ Default IPv4 and IPv6 Regel löschen und folgende neu erstellen:
   </tr>
 </table>
 
-![Bildschirmfoto 2025-05-28 um 19.24.34.png](/Users/maxresch/Desktop/Bildschirmfoto%202025-05-28%20um%2019.24.34.png)
+![Bildschirmfoto 2025-05-28 um 19.24.34.png](src/minio-access-rule.png)
 
 **mysql DB** - Sicherheitsgruppe
 
@@ -469,7 +469,7 @@ Default IPv4 and IPv6 Regel löschen und folgende neu erstellen:
 | Port        | 3306                 |
 | CIDR        | 0.0.0.0/0            |
 
-![Bildschirmfoto 2025-05-28 um 19.34.12.png](/var/folders/_1/y0thvzv12qj717ps__h1m72m0000gn/T/TemporaryItems/NSIRD_screencaptureui_m8m0YY/Bildschirmfoto%202025-05-28%20um%2019.34.12.png)
+![Bildschirmfoto 2025-05-28 um 19.34.12.png](src/mysql-access-rule.png)
 
 **Image Detection** - Sicherheitsgruppe
 
@@ -490,7 +490,7 @@ Default IPv4 and IPv6 Regel löschen und folgende neu erstellen:
 | Port        | 8000                 |
 | CIDR        | 0.0.0.0/0            |
 
-![Bildschirmfoto 2025-05-28 um 19.25.53.png](/Users/maxresch/Desktop/Bildschirmfoto%202025-05-28%20um%2019.25.53.png)
+![Bildschirmfoto 2025-05-28 um 19.25.53.png](src/image-detection-access-rule.png)
 
 ##### 
 
@@ -509,7 +509,7 @@ Folgende 4 Floating IPs erstellen
 | Beschreibung | mysqldb        |
 | Beschreibung | imagedetection |
 
-![Bildschirmfoto 2025-05-28 um 19.30.44.png](/Users/maxresch/Desktop/Bildschirmfoto%202025-05-28%20um%2019.30.44.png)
+![Bildschirmfoto 2025-05-28 um 19.30.44.png](src/floating-ips-all.png)
 
 > Die IP-Adressen werden dynamisch zugeteilt, daher können diese von dieser Abbildung varieren
 
