@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  api:
+    image: mreschfh/os-api-gateway:0.6
+    container_name: fastapi-api
+    environment:
+      - DETECT_API_URL=http://10.0.0.40:8000/detect
+      - MYSQL_HOST=10.0.0.30
+      - MYSQL_PORT=3306
+      - MYSQL_USER=apiUser
+      - MYSQL_PASSWORD=superStrongPW
+      - MYSQL_DATABASE=uploadedImages
+    ports:
+      - "8000:8000"
+    depends_on:
+      - uploader
+
+  uploader:
+    image: mreschfh/os-minio-uploader:0.2
+    container_name: minio-uploader
+    ports:
+      - "5000:5000"
+    environment:
+      MINIO_ENDPOINT: http://10.0.0.20:9000
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
