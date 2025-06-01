@@ -912,16 +912,16 @@ sudo docker-compose up -d
 
 ### Service Testen
 
-Mittels der Datei vogel_1.jpeg und dem curl Befehl kann der Servcie aufgerufen und getestet werden. Die vogel_1.jpeg Datei muss sich im selben Verzeichnis von wi der curl befehl ausgeführt wird befinden
+Mittels der Datei vogel_1.jpg und dem curl Befehl kann der Servcie aufgerufen und getestet werden. Die vogel_1.jpg Datei muss sich im selben Verzeichnis von wi der curl befehl ausgeführt wird befinden
 
 ```bash
-curl -F "file=@vogel_1.jpeg" http://<float-ip-api-gateway>:8000/upload
+curl -F "file=@vogel_1.jpg" http://<float-ip-api-gateway>:8000/upload
 ```
 
 Als Antwort kommt sowas ähnliches wie
 
 ```context
-{"filename":"7d79c971-6f76-4de6-a416-37a59d72ac8f_vogel_1.jpeg","upload_response":{"status":"success","key":"9e0a1d04-9f8c-4423-b114-f440f79ff804_7d79c971-6f76-4de6-a416-37a59d72ac8f_vogel_1.jpeg"},"detection":{"results":[{"label":"bird","confidence":0.62}]}}
+{"filename":"7d79c971-6f76-4de6-a416-37a59d72ac8f_vogel_1.jpg","upload_response":{"status":"success","key":"9e0a1d04-9f8c-4423-b114-f440f79ff804_7d79c971-6f76-4de6-a416-37a59d72ac8f_vogel_1.jpg"},"detection":{"results":[{"label":"bird","confidence":0.62}]}}
 ```
 
 zurück
