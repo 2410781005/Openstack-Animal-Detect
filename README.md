@@ -872,9 +872,9 @@ docker-compose.yml Datei erstellen
 nano docker-compose.yml
 ```
 
-und dieses python Script einfügen
+und diesen Code einfügen
 
-```python
+```dockerfile
 version: "3.8"
 
 services:
