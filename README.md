@@ -66,7 +66,7 @@ Das Image Detection Service bietet die Möglichkeit Objekte, spezifiziert auf Ti
 
 
 
-![Architektur_OpenStack.png](/Users/maxresch/Documents/FH%20Burgenland/INENPT-Buzanits/Architektur_OpenStack.png)
+![Architektur_OpenStack.png](src/Architektur_OpenStack.png)
 
 
 
