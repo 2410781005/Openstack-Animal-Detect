@@ -65,7 +65,10 @@ Animal Detection Service von Gruppe 3, Christoph Hiess und Maximilian Resch, bie
 Das Image Detection Service bietet die Möglichkeit Objekte, spezifiziert auf Tiere, auf einem übermittelten Bild zu identifizieren und zu erkennen. Die Übertragung erfolgt mittels einer Anfrage an das API-Gateway. Dieser Service (API-Gateway) beinhaltet die gesammte Logik, nimmt das Bild entgegen, ladet es auf einen S3 Objekt Storage (Minio) hoch, sendet das Bild an den Image Detection Service und trägt die Ergebnisse mit dem Dateinamen in eine Datenbank ein.
 
 
-![Architektur_OpenStack.png](src/Architektur_OpenStack.png)
+
+![Architektur_OpenStack.png](/Users/maxresch/Documents/FH%20Burgenland/INENPT-Buzanits/Architektur_OpenStack.png)
+
+
 
 > WICHTIG: Wir haben uns bei diesem Projekt auf die OpenStack Infrastruktur konzentriert, Sicherheitsfunktionen des Service wurden nachrangig behandelt. Im letzten Punkt "Security Verbesserungen" haben wir beschrieben wie wir unseren Service besser absichern könnte.
 
@@ -96,12 +99,12 @@ Alle Dateien uns Scripte befinden sich in unserem GitHub Repository
 | -------------- | ---------- | ---------------- | ---------------- |
 | GruppeC-Router | 10.0.0.1   | GruppeC-Netzwerk | provider         |
 
-| Host           | IP-Adresse | Sicherheitsgruppen          | Spezielle Ports |
-| -------------- | ---------- | --------------------------- | --------------- |
-| API-Gateway    | 10.0.0.10  | SSH, API-Access             | 8000            |
-| Minio          | 10.0.0.20  | SSH, minio Web und API      | 9000, 9001      |
-| mysqldb        | 10.0.0.30  | SSH, mysql access           | 3306            |
-| imageDetection | 10.0.0.40  | SSH, image detection access | 8000            |
+| Host           | IP-Adresse | Sicherheitsgruppen           | Spezielle Ports | Floating-IP   |
+| -------------- | ---------- | ---------------------------- | --------------- | ------------- |
+| API-Gateway    | 10.0.0.10  | SSH, API-Access-Instanz      | 8000            | 172.20.42.190 |
+| Minio          | 10.0.0.20  | SSH, MinioStorage-Instanz    | 9000, 9001      | 172.20.42.126 |
+| mysqldb        | 10.0.0.30  | SSH, mysql-Instanz           | 3306            | 172.20.42.102 |
+| imageDetection | 10.0.0.40  | SSH, Image-Detection-Instanz | 8000            | 172.20.42.198 |
 
 ### Anleitung
 
@@ -173,7 +176,7 @@ Navigiere zu **Port erstellen**
   </tr>
   <tr>
     <td>Feste IP-Adresse</td>
-    <td>10.0.0.10</td>
+    <td>10.0.0.<b>10</b></td>
   </tr>
 </table>
 
@@ -272,10 +275,6 @@ Navigiere zu **Netzwerk -> Netzwerktopologie**
     <td>Subnetz</td>
     <td>GruppeC-Netzwerk</td>
   </tr>
-  <tr>
-    <td>Externes Netzwerk</td>
-    <td>provider</td>
-  </tr>
 </table>
 
 ##### Sicherheitsgruppen
@@ -331,7 +330,7 @@ Default IPv4 and IPv6 Regel löschen und folgende neu erstellen:
   </tr>
   <tr>
     <td>Name</td>
-    <td>API-Access</td>
+    <td>API-Access-Instanz</td>
   </tr>
   <tr>
     <td>Beschreibung</td>
@@ -341,7 +340,7 @@ Default IPv4 and IPv6 Regel löschen und folgende neu erstellen:
 
 **API-Access** - Regeln
 
-Default IPv4 and IPv6 Regel löschen und folgende neu erstellen:
+Default IPv4 and IPv6 Regel löschMinioStorage-Instanzen und folgende neu erstellen:
 
 <table>
   <tr>
@@ -370,7 +369,9 @@ Default IPv4 and IPv6 Regel löschen und folgende neu erstellen:
   </tr>
 </table>
 
-![Bildschirmfoto 2025-05-28 um 19.24.53.png](src/api-access-rule.png)
+![api-access-rule.png](/Users/maxresch/Documents/FH%20Burgenland/INENPT-Buzanits/src/api-access-rule.png)
+
+
 
 **Minio** - Sicherheitsgruppe
 
@@ -381,7 +382,7 @@ Default IPv4 and IPv6 Regel löschen und folgende neu erstellen:
   </tr>
   <tr>
     <td>Name</td>
-    <td>minio Web und API</td>
+    <td>MinioStorage-Instanz</td>
   </tr>
   <tr>
     <td>Beschreibung</td>
@@ -415,9 +416,13 @@ Default IPv4 and IPv6 Regel löschen und folgende neu erstellen:
     <td>9000</td>
   </tr>
   <tr>
-    <td>CIDR</td>
-    <td>0.0.0.0/0</td>
+    <td>Entfernt</td>
+    <td>Sicherheitsgruppe</td>
   </tr>
+  <tr>
+    <td>Sicherheitsgruppe</td>
+    <td>API-Access-Instanz</td>
+  </tr>  
 </table>
 
 <table>
@@ -428,6 +433,10 @@ Default IPv4 and IPv6 Regel löschen und folgende neu erstellen:
   <tr>
     <td>Regel</td>
     <td>angepasste TCP Regel</td>
+  </tr>
+<tr>
+    <td>Beschreibung</td>
+    <td>Öffentlich damit auf die WebUI zugegriffen werden kann</td>
   </tr>
   <tr>
     <td>Richtung</td>
@@ -442,56 +451,66 @@ Default IPv4 and IPv6 Regel löschen und folgende neu erstellen:
     <td>9001</td>
   </tr>
   <tr>
+    <td>Entfernt</td>
     <td>CIDR</td>
+  </tr>
+  <tr>
+    <td>Sicherheitsgruppe</td>
     <td>0.0.0.0/0</td>
   </tr>
 </table>
 
-![Bildschirmfoto 2025-05-28 um 19.24.34.png](src/minio-access-rule.png)
+![minio-access-rule.png](/Users/maxresch/Documents/FH%20Burgenland/INENPT-Buzanits/src/minio-access-rule.png)
+
+
 
 **mysql DB** - Sicherheitsgruppe
 
 | Bezeichnung  | Wert                              |
 | ------------ | --------------------------------- |
-| Name         | mysql access                      |
+| Name         | mysql-Instanz                     |
 | Beschreibung | Zugriff auf die mysql DB erlauben |
 
 **mysql DB** - Regeln
 
 Default IPv4 and IPv6 Regel löschen und folgende neu erstellen:
 
-| Bezeichnung | Wert                 |
-| ----------- | -------------------- |
-| Regel       | angepasste TCP Regel |
-| Richtung    | Eintritt             |
-| Port öffnen | Port                 |
-| Port        | 3306                 |
-| CIDR        | 0.0.0.0/0            |
+| Bezeichnung       | Wert                 |
+| ----------------- | -------------------- |
+| Regel             | angepasste TCP Regel |
+| Richtung          | Eintritt             |
+| Port öffnen       | Port                 |
+| Port              | 3306                 |
+| Entfernt          | Sicherheitsgruppe    |
+| Sicherheitsgruppe | API-Access-Instanz   |
 
-![Bildschirmfoto 2025-05-28 um 19.34.12.png](src/mysql-access-rule.png)
+![mysql-access-rule.png](/Users/maxresch/Documents/FH%20Burgenland/INENPT-Buzanits/src/mysql-access-rule.png)
+
+
 
 **Image Detection** - Sicherheitsgruppe
 
 | Bezeichnung  | Wert                                        |
 | ------------ | ------------------------------------------- |
-| Name         | image detection access                      |
+| Name         | Image-Detection-Instanz                     |
 | Beschreibung | Zugriff auf die ImageDetection API erlauben |
 
 **Image Detection** - Regeln
 
 Default IPv4 and IPv6 Regel löschen und folgende neu erstellen:
 
-| Bezeichnung | Wert                 |
-| ----------- | -------------------- |
-| Regel       | angepasste TCP Regel |
-| Richtung    | Eintritt             |
-| Port öffnen | Port                 |
-| Port        | 8000                 |
-| CIDR        | 0.0.0.0/0            |
+| Bezeichnung       | Wert                 |
+| ----------------- | -------------------- |
+| Regel             | angepasste TCP Regel |
+| Richtung          | Eintritt             |
+| Port öffnen       | Port                 |
+| Port              | 8000                 |
+| Entfernt          | Sicherheitsgruppe    |
+| Sicherheitsgruppe | API-Access-Instanz   |
 
-![Bildschirmfoto 2025-05-28 um 19.25.53.png](src/image-detection-access-rule.png)
+![image-detection-access-rule.png](/Users/maxresch/Documents/FH%20Burgenland/INENPT-Buzanits/src/image-detection-access-rule.png)
 
-##### 
+ 
 
 ##### Floating IP's
 
@@ -508,13 +527,15 @@ Folgende 4 Floating IPs erstellen
 | Beschreibung | mysqldb        |
 | Beschreibung | imagedetection |
 
-![Bildschirmfoto 2025-05-28 um 19.30.44.png](src/floating-ips-all.png)
+![floating-ips-all.png](/Users/maxresch/Documents/FH%20Burgenland/INENPT-Buzanits/src/floating-ips-all.png)
+
+
 
 > Die IP-Adressen werden dynamisch zugeteilt, daher können diese von dieser Abbildung varieren
 
 #### Compute Instanzen erstellen
 
-##### Minio
+#### Minio
 
 Navigiere zu **Compute -> Instanzen -> Instanz starten**
 
@@ -526,20 +547,18 @@ Navigiere zu **Compute -> Instanzen -> Instanz starten**
 | Variante           | Variante           | m1.medium              |
 | Netzwerk-Ports     | Port               | minio-port             |
 | Sicherheitsgruppen | Sicherheitsgruppen | SSH                    |
-|                    |                    | minio Web und API      |
+|                    |                    | MinioStorage-Instanz   |
 |                    |                    | default                |
 | Schlüsselpaar      | Schlüsselpaar      | den du hinterlegt hast |
 
 Nachdem die Instanz fertig hochgefahren ist:
 
-Rechts im Dropdown Menu "**Floating IP zuweisen**" wählen und die 
-
-Und dann die IP auswählen die in den oberen Schritten erstellt wurde
+Rechts im Dropdown Menu "**Floating IP zuweisen**" wählen und dann die IP auswählen die in den oberen Schritten erstellt wurde
 
 Auf die Instanz mit SSH verbinden
 
 ```bash
-ssh ubuntu@<Floating-IP>
+ssh ubuntu@172.20.42.126
 ```
 
 **Minio installieren**
@@ -557,7 +576,7 @@ minio server ~/minio --console-address :9001 &
 
 Danach auf die Minio WebUI gehen und anmelden:
 
-http://[floating-ip]:9001
+http://172.20.42.126:9001
 
 | Beschreibung | Wert       |
 | ------------ | ---------- |
@@ -572,7 +591,7 @@ Navigiere in der Minio WebUI zu **Buckets -> create bucket**
 
 Minio ist damit fertig konfiguriert, die weiteren Schritte werden wieder in der OpenStack Infrastruktur durchgeführt
 
-##### mysql DB Instanz
+#### mysql DB Instanz
 
 Navigiere zu **Compute -> Instanzen -> Instanz starten**
 
@@ -584,20 +603,18 @@ Navigiere zu **Compute -> Instanzen -> Instanz starten**
 | Variante           | Variante           | m1.medium              |
 | Netzwerk-Ports     | Port               | mysql-port             |
 | Sicherheitsgruppen | Sicherheitsgruppen | SSH                    |
-|                    |                    | mysql access           |
+|                    |                    | mysql-Instanz          |
 |                    |                    | default                |
 | Schlüsselpaar      | Schlüsselpaar      | den du hinterlegt hast |
 
 Nachdem die Instanz fertig hochgefahren ist:
 
-Rechts im Dropdown Menu "**Floating IP zuweisen**" wählen und die
-
-Und dann die IP auswählen die in den oberen Schritten erstellt wurde
+Rechts im Dropdown Menu "**Floating IP zuweisen**" wählen und dann die IP auswählen die in den oberen Schritten erstellt wurde
 
 Auf die Instanz mit SSH verbinden
 
 ```bash
-ssh ubuntu@<Floating-IP>
+ssh ubuntu@172.20.42.102
 ```
 
 **mysql installieren**
@@ -668,7 +685,7 @@ Mit nano kann mittels "STRG+W" die Suche geöffnet werden. In die Suche "bind-ad
 Diese Zeile dann auf
 
 ```context
-bind-address = 0.0.0.0
+bind-address = 10.0.0.30
 ```
 
 setzen und mysql neustarten
@@ -677,32 +694,30 @@ setzen und mysql neustarten
 sudo systemctl restart mysql
 ```
 
-##### Image detection Instanz
+#### Image detection Instanz
 
 Navigiere zu **Compute -> Instanzen -> Instanz starten**
 
-| Menu               | Beschreibung       | Wert                   |
-| ------------------ | ------------------ | ---------------------- |
-| Details            | Instanzname        | imageDetection         |
-| Quelle             | Datenträgergröße   | 30 GB                  |
-| Quelle             | Abbild             | Ubuntu 24.04           |
-| Variante           | Variante           | m1.medium              |
-| Netzwerk-Ports     | Port               | image-detection-port   |
-| Sicherheitsgruppen | Sicherheitsgruppen | SSH                    |
-|                    |                    | image detection access |
-|                    |                    | default                |
-| Schlüsselpaar      | Schlüsselpaar      | den du hinterlegt hast |
+| Menu               | Beschreibung       | Wert                    |
+| ------------------ | ------------------ | ----------------------- |
+| Details            | Instanzname        | imageDetection          |
+| Quelle             | Datenträgergröße   | 30 GB                   |
+| Quelle             | Abbild             | Ubuntu 24.04            |
+| Variante           | Variante           | m1.medium               |
+| Netzwerk-Ports     | Port               | image-detection-port    |
+| Sicherheitsgruppen | Sicherheitsgruppen | SSH                     |
+|                    |                    | Image-Detection-Instanz |
+|                    |                    | default                 |
+| Schlüsselpaar      | Schlüsselpaar      | den du hinterlegt hast  |
 
 Nachdem die Instanz fertig hochgefahren ist:
 
-Rechts im Dropdown Menu "**Floating IP zuweisen**" wählen und die
-
-Und dann die IP auswählen die in den oberen Schritten erstellt wurde
+Rechts im Dropdown Menu "**Floating IP zuweisen**" wählen und dann die IP auswählen die in den oberen Schritten erstellt wurde
 
 Auf die Instanz mit SSH verbinden
 
 ```bash
-ssh ubuntu@<Floating-IP>
+ssh ubuntu@172.20.42.198
 ```
 
 **Image Detection installieren**
@@ -802,7 +817,7 @@ Danach mit dem uvicorn Befehl das Script nochmal starten
 
 ##### 
 
-##### API-Gateway Instanz
+#### API-Gateway Instanz
 
 Navigiere zu **Compute -> Instanzen -> Instanz starten**
 
@@ -814,20 +829,18 @@ Navigiere zu **Compute -> Instanzen -> Instanz starten**
 | Variante           | Variante           | m1.medium              |
 | Netzwerk-Ports     | Port               | api-gateway-port       |
 | Sicherheitsgruppen | Sicherheitsgruppen | SSH                    |
-|                    |                    | API-Access             |
+|                    |                    | API-Access-Instanz     |
 |                    |                    | default                |
 | Schlüsselpaar      | Schlüsselpaar      | den du hinterlegt hast |
 
 Nachdem die Instanz fertig hochgefahren ist:
 
-Rechts im Dropdown Menu "**Floating IP zuweisen**" wählen und die
-
-Und dann die IP auswählen die in den oberen Schritten erstellt wurde
+Rechts im Dropdown Menu "**Floating IP zuweisen**" wählen und dann die IP auswählen die in den oberen Schritten erstellt wurde
 
 Auf die Instanz mit SSH verbinden
 
 ```bash
-ssh ubuntu@<Floating-IP>
+ssh ubuntu@172.20.42.190
 ```
 
 **API-Gateway konfigurieren**
@@ -914,7 +927,7 @@ sudo docker-compose up -d
 Mittels der Datei vogel_1.jpg und dem curl Befehl kann der Servcie aufgerufen und getestet werden. Die vogel_1.jpg Datei muss sich im selben Verzeichnis von wi der curl befehl ausgeführt wird befinden
 
 ```bash
-curl -F "file=@vogel_1.jpg" http://<float-ip-api-gateway>:8000/upload
+curl -F "file=@vogel_1.jpg" http://172.20.42.190:8000/upload
 ```
 
 Als Antwort kommt sowas ähnliches wie
