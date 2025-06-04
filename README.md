@@ -460,7 +460,7 @@ Default IPv4 and IPv6 Regel löschen und folgende neu erstellen:
   </tr>
 </table>
 
-![minio-access-rule.png](/Users/maxresch/Documents/FH%20Burgenland/INENPT-Buzanits/src/minio-access-rule.png)
+![minio-access-rule.png](src/minio-access-rule.png)
 
 
 
@@ -484,7 +484,7 @@ Default IPv4 and IPv6 Regel löschen und folgende neu erstellen:
 | Entfernt          | Sicherheitsgruppe    |
 | Sicherheitsgruppe | API-Access-Instanz   |
 
-![mysql-access-rule.png](/Users/maxresch/Documents/FH%20Burgenland/INENPT-Buzanits/src/mysql-access-rule.png)
+![mysql-access-rule.png](src/mysql-access-rule.png)
 
 
 
@@ -508,7 +508,7 @@ Default IPv4 and IPv6 Regel löschen und folgende neu erstellen:
 | Entfernt          | Sicherheitsgruppe    |
 | Sicherheitsgruppe | API-Access-Instanz   |
 
-![image-detection-access-rule.png](/Users/maxresch/Documents/FH%20Burgenland/INENPT-Buzanits/src/image-detection-access-rule.png)
+![image-detection-access-rule.png](src/image-detection-access-rule.png)
 
  
 
@@ -527,7 +527,7 @@ Folgende 4 Floating IPs erstellen
 | Beschreibung | mysqldb        |
 | Beschreibung | imagedetection |
 
-![floating-ips-all.png](/Users/maxresch/Documents/FH%20Burgenland/INENPT-Buzanits/src/floating-ips-all.png)
+![floating-ips-all.png](src/floating-ips-all.png)
 
 
 
