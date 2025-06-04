@@ -369,7 +369,7 @@ Default IPv4 and IPv6 Regel löschMinioStorage-Instanzen und folgende neu erstel
   </tr>
 </table>
 
-![api-access-rule.png](/Users/maxresch/Documents/FH%20Burgenland/INENPT-Buzanits/src/api-access-rule.png)
+![api-access-rule.png](src/api-access-rule.png)
 
 
 
